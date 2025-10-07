@@ -11,37 +11,53 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
 );
 
 export const HarvardTemplate = ({ data }: { data: ResumeData }) => {
-  const { name, contact, education, experience, projects, research, skills, certifications, positions } = data;
+  const { name, contact, education, experience, projects, research, skills, certifications, positions, headings } = data;
 
   return (
     <div className="resume-page">
       <div className="p-[0.5in] font-[Times] text-[10pt] leading-[1.3]">
-        <header className="text-center mb-[8pt]">
-          <h1 className="text-[18pt] font-bold mb-[2pt]">{name}</h1>
-          <div className="flex justify-center items-center flex-wrap gap-x-[6pt] text-[9pt]">
-            <a href={`tel:${contact.phone}`} className="text-blue-700 hover:underline">{contact.phone}</a>
-            <span>|</span>
-            <a href={`mailto:${contact.email}`} className="text-blue-700 hover:underline">{contact.email}</a>
-            <span>|</span>
-            <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">LinkedIn</a>
-            <span>|</span>
-            <a href={contact.github} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">GitHub</a>
-            {contact.website && (<><span>|</span><a href={contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Website</a></>)}
-          </div>
-        </header>
+          <header className={`text-center mb-[8pt]`}>
+            <h1 className="text-[18pt] font-bold mb-[2pt]">{name}</h1>
+            <div className="flex justify-center items-center flex-wrap gap-x-[6pt] text-[9pt]">
+              {[
+                contact.phone && <a key="phone" href={`tel:${contact.phone}`} className="text-blue-700 hover:underline">{contact.phone}</a>,
+                contact.email && <a key="email" href={`mailto:${contact.email}`} className="text-blue-700 hover:underline">{contact.email}</a>,
+                contact.linkedin && <a key="linkedin" href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">LinkedIn</a>,
+                contact.github && <a key="github" href={contact.github} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">GitHub</a>,
+                contact.website && <a key="website" href={contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Website</a>,
+              ].filter(Boolean).map((el, idx, arr) => (
+                <React.Fragment key={idx}>
+                  {el}
+                  {idx < arr.length - 1 && <span>|</span>}
+                </React.Fragment>
+              ))}
+            </div>
+          </header>
 
-        <Section title="Education">
+        {education && education.length > 0 && (
+        <Section title={headings.education}>
           <div className="flex justify-between items-start">
-            <h3 className="font-bold">{education.degree}</h3>
-            <p>{education.university}</p>
+            {/* Render first item prominently */}
+            <h3 className="font-bold">{education[0].degree}</h3>
+            <p>{education[0].university}</p>
           </div>
-          <p className="mt-[2pt]">{education.details}</p>
+          <p className="mt-[2pt]">{education[0].details}</p>
+          {education.slice(1).map((edu, i) => (
+            <div key={i} className="mt-[6pt]">
+              <div className="flex justify-between items-start">
+                <h3 className="font-bold">{edu.degree}</h3>
+                <p>{edu.university}</p>
+              </div>
+              <p className="mt-[2pt]">{edu.details}</p>
+            </div>
+          ))}
         </Section>
+        )}
 
         {experience && experience.length > 0 && (
-          <Section title="Experience">
+          <Section title={headings.experience}>
             {experience.map((exp, i) => (
-              <div key={i} className="mb-[6pt] last:mb-0">
+              <div key={i} className={`mb-[6pt] last:mb-0`}>
                 <div className="flex justify-between items-baseline">
                   <h3 className="font-bold">{exp.title}</h3>
                   <p className="font-bold">{exp.company}</p>
@@ -59,9 +75,9 @@ export const HarvardTemplate = ({ data }: { data: ResumeData }) => {
         )}
 
         {projects && projects.length > 0 && (
-          <Section title="Projects">
+          <Section title={headings.projects}>
             {projects.map((proj, i) => (
-              <div key={i} className="mb-[6pt] last:mb-0">
+              <div key={i} className={`mb-[6pt] last:mb-0`}>
                 <div className="flex justify-between items-baseline">
                   <h3 className="font-bold">{proj.title}</h3>
                   {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-[9pt] text-blue-700 hover:underline font-medium">GitHub</a>}
@@ -75,21 +91,24 @@ export const HarvardTemplate = ({ data }: { data: ResumeData }) => {
           </Section>
         )}
 
-        {research && research.points && research.points.length > 0 && (
-          <Section title="Research">
-            <div className="mb-[4pt]">
-              <h3 className="font-bold">{research.title}</h3>
-              <p className="italic my-[2pt]">{research.subtitle}</p>
-              <p className="mb-[2pt]">{research.journal}</p>
-              <ul className="list-disc list-outside ml-4 space-y-[2pt]">
-                {research.points.map((point, j) => <li key={j}>{point}</li>)}
-              </ul>
-            </div>
+        {research && research.length > 0 && (
+          <Section title={headings.research}>
+            {research.map((res, i) => (
+              <div key={i} className="mb-[6pt] last:mb-0">
+                <h3 className="font-bold">{res.title}</h3>
+                <p className="italic my-[2pt]">{res.subtitle}</p>
+                <p className="mb-[2pt]">{res.journal}</p>
+                <ul className={`list-disc list-outside ml-4 space-y-[2pt]`}>
+                  {(res.points || []).map((point, j) => <li key={j}>{point}</li>)}
+                </ul>
+              </div>
+            ))}
           </Section>
         )}
 
-        <Section title="Technical Skills">
-          <div className="space-y-[2pt]">
+        {skills && skills.length > 0 && (
+        <Section title={headings.skills}>
+          <div className={`space-y-[2pt]`}>
             {skills.map((skill, i) => (
               <div key={i}>
                 <span className="font-bold">{skill.category}: </span>
@@ -98,16 +117,17 @@ export const HarvardTemplate = ({ data }: { data: ResumeData }) => {
             ))}
           </div>
         </Section>
+        )}
 
         {certifications && certifications.length > 0 && (
-          <Section title="Certifications">
+          <Section title={headings.certifications}>
             <p>{certifications.join('; ')}</p>
           </Section>
         )}
 
         {positions && positions.length > 0 && (
-          <Section title="Positions of Responsibility">
-            <ul className="list-disc list-outside ml-4 space-y-[2pt]">
+          <Section title={headings.positions}>
+            <ul className={`list-disc list-outside ml-4 space-y-[2pt]`}>
               {positions.map((pos, i) => <li key={i}>{pos}</li>)}
             </ul>
           </Section>
