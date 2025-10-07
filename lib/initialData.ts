@@ -20,11 +20,24 @@ export const initialData = {
     website: "https://example.com",
     leetcode: "https://leetcode.com/johndoe",
   },
-  education: {
-    degree: "B.S. in Computer Science",
-    university: "Example University",
-    details: "Expected Graduation: 2026 • GPA: 3.5/4.0",
+  // Headings are fully renamable in the editor
+  headings: {
+    personal: "Personal Details",
+    education: "Education",
+    experience: "Experience",
+    projects: "Projects",
+    research: "Research",
+    skills: "Technical Skills",
+    certifications: "Certifications",
+    positions: "Positions of Responsibility",
   },
+  education: [
+    {
+      degree: "B.S. in Computer Science",
+      university: "Example University",
+      details: "Expected Graduation: 2026 • GPA: 3.5/4.0",
+    },
+  ],
   experience: [
     {
       title: "Software Engineering Intern",
@@ -48,15 +61,17 @@ export const initialData = {
       ],
     },
   ] as Entry[],
-  research: {
-    title: "Example Research",
-    subtitle: "A short placeholder description of research work",
-    journal: "Presented at Example Conference",
-    points: [
-      "Summary point 1 about the research.",
-      "Summary point 2 about methods or findings.",
-    ],
-  },
+  research: [
+    {
+      title: "Example Research",
+      subtitle: "A short placeholder description of research work",
+      journal: "Presented at Example Conference",
+      points: [
+        "Summary point 1 about the research.",
+        "Summary point 2 about methods or findings.",
+      ],
+    },
+  ],
   skills: [
     { category: "Languages", list: "JavaScript, TypeScript, Python" },
     { category: "Frameworks", list: "React, Next.js, Node.js" },
