@@ -45,7 +45,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
       setData(prevData => ({
         ...prevData,
         [outerKey]: {
-          // @ts-ignore
+          // @ts-expect-error - dynamic nested key assignment;
           ...prevData[outerKey],
           [innerKey]: value,
         },
@@ -135,7 +135,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
   const updateEducation = (index: number, field: 'degree' | 'university' | 'details', value: string) => {
     setData(prev => {
       const next = [...prev.education];
-      next[index] = { ...next[index], [field]: value } as any;
+      next[index] = { ...next[index], [field]: value } as ResumeData['education'][number];
       return { ...prev, education: next };
     });
   };
@@ -156,7 +156,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
   const updateResearch = (index: number, field: 'title' | 'subtitle' | 'journal', value: string) => {
     setData(prev => {
       const next = [...prev.research];
-      next[index] = { ...next[index], [field]: value } as any;
+      next[index] = { ...next[index], [field]: value } as ResumeData['research'][number];
       return { ...prev, research: next };
     });
   };
@@ -165,7 +165,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
       const next = [...prev.research];
       const points = [...(next[rIndex].points || [])];
       points[pIndex] = value;
-      next[rIndex] = { ...next[rIndex], points } as any;
+      next[rIndex] = { ...next[rIndex], points } as ResumeData['research'][number];
       return { ...prev, research: next };
     });
   };
@@ -173,7 +173,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
     setData(prev => {
       const next = [...prev.research];
       const points = [...(next[rIndex].points || []), ''];
-      next[rIndex] = { ...next[rIndex], points } as any;
+      next[rIndex] = { ...next[rIndex], points } as ResumeData['research'][number];
       return { ...prev, research: next };
     });
   };
@@ -181,7 +181,7 @@ export const ResumeForm = ({ data, setData }: { data: ResumeData, setData: React
     setData(prev => {
       const next = [...prev.research];
       const points = (next[rIndex].points || []).filter((_, i) => i !== pIndex);
-      next[rIndex] = { ...next[rIndex], points } as any;
+      next[rIndex] = { ...next[rIndex], points } as ResumeData['research'][number];
       return { ...prev, research: next };
     });
   };
